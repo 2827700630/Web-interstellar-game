@@ -1,0 +1,82 @@
+<!-- 游戏主文件 -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>星际指挥系统</title>
+    <!-- 引入主样式表 -->
+    <link rel="stylesheet" href="style.css">
+    <!-- 伤害数字浮动动画 -->
+    <style>
+        @keyframes damageFloat {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(-30px); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 游戏主容器 -->
+    <div class="game-container">
+        <!-- 全屏控制按钮 -->
+        <button class="fullscreen-btn" id="fullscreenBtn">全屏</button>
+        <!-- FPS显示器 -->
+        <div id="fpsCounter" class="fps-display">FPS: 0</div>
+        <!-- 星空背景层 -->
+        <canvas id="starCanvas"></canvas>
+        <!-- HUD界面层 - 用于显示游戏状态信息 -->
+        <canvas id="hudCanvas"></canvas>
+        <!-- 玩家飞船 -->
+        <div class="spaceship">
+            <!-- 飞船主体 - 使用CSS绘制 -->
+            <div class="spaceship-body"></div>
+        </div>
+        <!-- 武器系统状态指示器 -->
+        <div id="weaponIndicator" class="weapon-indicator">武器: 相位炮</div>
+    </div>
+
+    <!-- 游戏主逻辑 -->
+    <script type="module">
+        // 导入游戏所需的所有模块
+        // CONFIG: 游戏配置参数
+        // initFullscreenControl: 全屏控制功能
+        import { CONFIG, initFullscreenControl } from './modules/Config.js';
+        // StarField: 星空背景系统
+        import { StarField, CommandHUD } from './modules/commandUI.js';
+        // WEAPONS_CONFIG: 武器配置参数
+        import { WEAPONS_CONFIG } from './modules/weapon.js'; // 添加这行
+        // WeaponSystem: 武器系统
+        import { WeaponSystem } from './modules/weapon.js';
+        // PlayerShip: 玩家飞船类
+        import { PlayerShip } from './modules/ship.js';
+        // Enemy: 敌人飞船类
+        import { Enemy } from './modules/ship.js';
+        // ExplosionEffect: 爆炸效果系统
+        import { ExplosionEffect } from './modules/ExplosionEffect.js';
+
+        // 初始化全屏控制功能
+        initFullscreenControl();
+
+        // 创建游戏核心系统
+        // 星空背景系统 - 负责渲染动态星空背景
+        const starField = new StarField();
+        // 命令界面系统 - 负责显示游戏HUD界面
+        const commandHUD = new CommandHUD();
+
+        // 游戏主循环
+        // 负责更新和渲染所有游戏元素
+        function gameLoop() {
+            // 更新游戏状态
+            starField.update();    // 更新星空
+            starField.draw();      // 渲染星空
+            commandHUD.update();   // 更新HUD
+            starField.calculateFps(); // 计算FPS
+            // 请求下一帧动画
+            requestAnimationFrame(gameLoop);
+        }
+
+        // 启动游戏循环
+        gameLoop();
+    </script>
+</body>
+</html>

@@ -1,0 +1,494 @@
+/* 样式文件 */
+
+/* 基础样式 */
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 1);
+    font-family: 'Arial', sans-serif;
+    color: rgba(0, 255, 255, 1);
+
+}
+
+/* Canvas布局 */
+canvas {
+    position: fixed;
+    top: 0;
+    height: 100vh;
+}
+
+#starCanvas {
+    left: 0;
+    width: 100vw;
+    /* 充满整个视窗宽度 */
+    z-index: 1;
+    /* 调整星空画布的z-index */
+    display: block;
+}
+
+#hudCanvas {
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 300px;
+    height: 100vh;
+    z-index: 2;
+    /* 确保HUD在星空之上 */
+    pointer-events: none;
+    display: block;
+    background: rgba(0, 0, 0, 0.3);
+    /* 半透明背景 */
+    backdrop-filter: blur(3px);
+    /* 背景模糊效果 */
+    -webkit-backdrop-filter: blur(3px);
+    /* Safari支持 */
+    opacity: 0;
+    animation: fadeIn 0.5s ease-out 1.5s forwards;
+}
+
+/* 界面元素 */
+.fullscreen-btn {
+    position: fixed;
+    top: 10px;
+    left: 120px;
+    /* 移动到左侧 */
+    z-index: 3;
+    /* 提高z-index确保在星空之上 */
+    background: rgba(0, 50, 100, 0.8);
+    border: 1px solid rgba(0, 255, 255, 1);
+    color: rgba(0, 255, 255, 1);
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s;
+    text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+    /* 添加文字发光效果 */
+}
+
+.fullscreen-btn:hover {
+    background: rgba(0, 100, 150, 0.9);
+    box-shadow: 0 0 10px rgba(0, 255, 255, 1),
+        0 0 20px rgba(0, 255, 255, 0.5);
+    /* 增强悬停时的发光效果 */
+    transform: scale(1.05);
+    /* 添加轻微的放大效果 */
+}
+
+#fpsCounter {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 3;
+    /* 确保在星空之上 */
+    background: rgba(0, 0, 0, 0.7);
+    padding: 5px 10px;
+    border: 1px solid rgba(0, 255, 255, 1);
+    color: rgba(0, 255, 255, 1);
+
+}
+
+/* HUD界面元素 */
+.hud-section {
+    display: none;
+}
+
+.progress-bar {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(0, 255, 255, 0.5);
+}
+
+.grid-line {
+    stroke: rgba(0, 255, 255, 0.2);
+    stroke-width: 0.5;
+}
+
+/* 添加HUD容器样式 */
+.hud-container {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 300px;
+    height: 100vh;
+    background: rgba(0, 20, 40, 0.6);
+    z-index: 2;
+    pointer-events: none;
+}
+
+/* HUD样式变量 */
+:root {
+    --hud-gradient-start: rgba(0, 30, 60, 0.9);
+    --hud-gradient-end: rgba(0, 50, 100, 0.9);
+    --hud-border-color: rgba(0, 255, 255, 1);
+    --hud-shadow-color: rgba(0, 255, 255, 0.5);
+    --status-hull-color: rgba(255, 68, 68, 1);
+    --status-shield-color: rgba(68, 255, 68, 1);
+    --status-weapon-color: rgba(255, 170, 0, 1);
+}
+
+/* HUD文本样式 */
+.hud-text {
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    color: rgba(0, 255, 255, 1);
+}
+
+/* 状态指示器 */
+.status-indicator {
+    border-radius: 2px;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+}
+
+/* 网格线样式 */
+.grid-system {
+    stroke: rgba(0, 255, 255, 0.2);
+    stroke-width: 0.5;
+}
+
+/* 进度条容器 */
+.progress-container {
+    margin: 5px 0;
+    padding: 2px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 3px;
+}
+
+/* 玩家指示器 */
+.player-indicator {
+    background: rgba(0, 255, 255, 1);
+    box-shadow: 0 0 8px rgba(0, 255, 255, 0.6);
+    border-radius: 50%;
+}
+
+/* 系统状态文本 */
+.system-status {
+    margin-bottom: 5px;
+    text-shadow: 0 0 3px rgba(0, 255, 255, 0.5);
+}
+
+/* 武器系统名称 */
+.weapon-name {
+    font-size: 12px;
+    margin-bottom: 2px;
+    color: rgba(0, 255, 255, 1);
+}
+
+/* 玩家战舰样式 */
+.spaceship {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 50px;
+    height: 40px;
+    z-index: 2;
+    pointer-events: none;
+    transition: transform 0.1s ease;
+}
+
+.spaceship-body {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    /* 更新SVG以显示更清晰的方向指示 */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 50 40'%3E%3Cpath d='M25 0 L40 30 L25 25 L10 30 Z' fill='rgba(0, 255, 255, 0.2)' stroke='rgba(0, 255, 255, 0.8)' stroke-width='1'/%3E%3Cline x1='25' y1='0' x2='25' y2='10' stroke='rgba(0, 255, 255, 0.6)' stroke-width='1'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    filter: drop-shadow(0 0 5px rgba(0, 255, 255, 0.5));
+}
+
+/* 移除之前的缩放相关样式 */
+.game-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* 添加缩放效果样式 */
+.game-container {
+    transform-origin: center;
+    transition: transform 0.1s ease;
+}
+
+/* 战舰视角效果 */
+.player-view {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 255, 255, 0.2);
+    clip-path: polygon(50% 0, 100% 100%, 50% 80%, 0 100%);
+    border: 1px solid rgba(0, 255, 255, 0.5);
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+}
+
+/* 武器系统样式 */
+.projectile {
+    position: absolute;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.weapon-type-1 {
+    width: 10px;
+    height: 20px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 20'%3E%3Cpath d='M5 0 L10 20 L5 15 L0 20 Z' fill='rgba(255, 100, 0, 0.6)' stroke='rgba(255, 150, 0, 0.8)' stroke-width='1'/%3E%3C/svg%3E");
+}
+
+.weapon-type-2 {
+    width: 15px;
+    height: 15px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 15 15'%3E%3Ccircle cx='7.5' cy='7.5' r='7' fill='rgba(0, 200, 255, 0.4)' stroke='rgba(0, 255, 255, 0.8)' stroke-width='1'/%3E%3C/svg%3E");
+}
+
+/* 武器切换指示器 */
+.weapon-indicator {
+    display: none;
+}
+
+/* 状态显示 */
+.status-display {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 3;
+    background: rgba(0, 30, 60, 0.9);
+    padding: 15px;
+    border: 1px solid rgba(0, 255, 255, 1);
+    color: rgba(0, 255, 255, 1);
+    font-family: 'Courier New', monospace;
+    min-width: 250px;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+    pointer-events: none;
+    opacity: 0;
+    animation: fadeIn 0.5s ease-out 1.2s forwards;
+}
+
+.status-bar {
+    margin: 8px 0;
+}
+
+.status-label {
+    font-size: 14px;
+    margin-bottom: 4px;
+    color: rgba(0, 255, 255, 0.9);
+    text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+}
+
+.status-value-bar {
+    height: 12px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(0, 255, 255, 0.5);
+    position: relative;
+    border-radius: 2px;
+    overflow: hidden;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+.status-value-bar>div {
+    height: 100%;
+    transition: width 0.3s ease;
+}
+
+.status-number {
+    font-size: 12px;
+    text-align: right;
+    margin-top: 2px;
+    color: rgba(0, 255, 255, 0.8);
+}
+
+.weapon-status {
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(0, 255, 255, 0.3);
+}
+
+.ammo-warning {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(255, 0, 0, 0.7);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    z-index: 1000;
+    animation: fadeOut 1s forwards;
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+/* 敌人战舰样式 */
+.enemy-ship {
+    position: absolute;
+    width: 40px;
+    height: 32px;
+    pointer-events: none;
+    z-index: 2;
+    transition: transform 0.1s ease;
+}
+
+.enemy-ship-body {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 32'%3E%3Cpath d='M20 0 L32 24 L20 20 L8 24 Z' fill='rgba(255, 50, 50, 0.2)' stroke='rgba(255, 50, 50, 0.8)' stroke-width='1'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    filter: drop-shadow(0 0 5px rgba(255, 50, 50, 0.5));
+}
+
+/* 爆炸效果样式 */
+.explosion-particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: rgba(255, 100, 50, 0.8);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 3;
+    box-shadow: 0 0 10px rgba(255, 100, 50, 0.5);
+}
+
+/* 爆炸碎片样式 */
+.ship-debris {
+    position: absolute;
+    background: rgba(0, 255, 255, 0.6);
+    box-shadow: 0 0 8px rgba(0, 255, 255, 0.4);
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* 修改命中特效样式 */
+.hit-flash {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 0, 0, 0.6);
+    animation: hitFlash 0.2s ease-out;
+    pointer-events: none;
+    transform-origin: center;
+}
+
+@keyframes hitFlash {
+    0% {
+        opacity: 1;
+        transform: scale(1.2);
+    }
+
+    100% {
+        opacity: 0;
+        transform: scale(1);
+    }
+}
+
+/* 修改命中特效闪光 */
+.hit-spark {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background: radial-gradient(circle, rgba(255, 200, 0, 1) 0%, rgba(255, 100, 0, 0) 70%);
+    pointer-events: none;
+    transform-origin: center;
+    animation: sparkFade 0.3s ease-out forwards;
+}
+
+@keyframes sparkFade {
+    0% {
+        transform: translate(-50%, -50%) scale(0.5);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translate(-50%, -50%) scale(2);
+        opacity: 0;
+    }
+}
+
+/* 游戏结束提示样式 */
+.game-over {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.8);
+    padding: 2em;
+    border-radius: 10px;
+    border: 2px solid #00ffff;
+    color: #fff;
+    text-align: center;
+    z-index: 1000;
+}
+
+.game-over h1 {
+    color: #ff0000;
+    margin-bottom: 0.5em;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* UI统一容器 */
+.game-ui {
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 300px;
+    height: 100vh;
+    background: rgba(0, 20, 40, 0.6);
+    z-index: 10;
+    transform: translateX(100%);
+    animation: uiSlideIn 1.5s ease-out forwards;
+}
+
+/* UI初始化动画 */
+@keyframes uiSlideIn {
+    0% {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    20% {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* 扫描线效果 */
+.ui-scan-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: rgba(0, 255, 255, 0.5);
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+    animation: scanLine 1.5s ease-out;
+}
+
+@keyframes scanLine {
+    0% {
+        top: 0;
+        opacity: 0;
+    }
+    20% {
+        opacity: 1;
+    }
+    100% {
+        top: 100%;
+        opacity: 0;
+    }
+}
