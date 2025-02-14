@@ -1,6 +1,8 @@
 # 星际指挥系统
 
 一个基于HTML5 Canvas的星际战争主题游戏。
+进入 https://2827700630.github.io/Web-interstellar-game/ 即可游玩
+本游戏代码几乎全部由copliot完成（包括下面的日志）
 
 ## 功能特性
 
